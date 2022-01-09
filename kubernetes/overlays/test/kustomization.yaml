@@ -1,0 +1,14 @@
+bases:
+- ./../../base/
+
+resources:
+  - configmap.yaml
+  - route.yaml
+configMapGenerator:
+- name: website-config
+  files:
+    - config.js
+namePrefix: test-
+commonLabels:
+  app: demo-website
+  group: demo-website
