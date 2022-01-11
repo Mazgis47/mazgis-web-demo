@@ -5,4 +5,4 @@ metadata:
 data:
   environment: test
   NODE_ENV: 'TEST'
-  PORT: '3000'
+  PORT: '80'
