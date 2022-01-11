@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: demo-website
-data:
-  environment: prod
-  NODE_ENV: 'PRODUCTION'
-  PORT: '3000'

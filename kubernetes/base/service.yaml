@@ -9,8 +9,8 @@ spec:
   type: ClusterIP
   ports:
     - name: http
-      port: 443
-      targetPort: http
+      port: 80
+      targetPort: 80
   selector:
     app: demo-website
     group: demo-website

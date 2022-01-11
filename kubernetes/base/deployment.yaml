@@ -12,10 +12,11 @@ spec:
     spec:
       containers:
         - name: demo-website
-          image: mazgis47/demo-website:image_tag_placeholder
+          # image: mazgis47/test-web-app:latest
+          image: nginx:1.14.2
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 80
           resources:
             requests:
               memory: "256Mi"

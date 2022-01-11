@@ -3,7 +3,6 @@ bases:
 
 resources:
   - configmap.yaml
-  - route.yaml
 configMapGenerator:
 - name: website-config
   files:
