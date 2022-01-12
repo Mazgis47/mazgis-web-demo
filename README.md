@@ -68,3 +68,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## App deploy
+
+aws sts get-caller-identity
+aws eks --region us-east-2 update-kubeconfig --name demo-eks-1
+kubectl get service/test-demo-website-loadbalancer |  awk {'print $1" " $2 " " $4 " " $5'} | column -t
+kubectl apply -k kubernetes/overlays/test
+kubectl apply -f drone/drone-master.yaml
+kubectl apply -f drone/drone-runner.yaml
+kubectl logs test-drone-runner-7b9657478b-59bbs
+kubectl exec --stdin --tty test-drone-runner-7b9657478b-59bbs -- /bin/sh

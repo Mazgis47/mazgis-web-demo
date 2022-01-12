@@ -1,0 +1,54 @@
+---
+kind: pipeline
+name: testing
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  disable: true
+
+steps:
+  - name: clone
+    pull: always
+    image: alpine:git
+    commands:
+    - git clone $DRONE_REMOTE_URL
+    - cd $DRONE_REPO_NAME
+    - git checkout $DRONE_BRANCH
+    when:
+      event:
+        exclude:
+        - pull_request
+##################################################
+  - name: clone
+    pull: always
+    image: docker:latest
+    commands:
+    - cd $DRONE_REPO_NAME
+    - docker build -t mazgis47/test-web-app:latest .
+    when:
+      event:
+        exclude:
+        - pull_request
+    volumes:
+    - name: docker
+      path: /var/run/docker.sock
+    depends_on:
+    - clone
+##################################################
+trigger:
+  event:
+    exclude:
+    - tag
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
+- name: tmp
+  host:
+    path: /tmp
+node:
+  images: build
