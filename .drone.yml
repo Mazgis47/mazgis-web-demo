@@ -12,7 +12,7 @@ clone:
 steps:
   - name: clone
     pull: always
-    image: alpine:git
+    image: alpine/git:latest
     commands:
     - git clone $DRONE_REMOTE_URL
     - cd $DRONE_REPO_NAME
