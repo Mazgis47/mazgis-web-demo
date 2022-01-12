@@ -47,8 +47,3 @@ volumes:
 - name: docker
   host:
     path: /var/run/docker.sock
-- name: tmp
-  host:
-    path: /tmp
-node:
-  images: build
