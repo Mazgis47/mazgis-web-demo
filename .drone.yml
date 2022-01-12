@@ -32,9 +32,9 @@ steps:
       event:
         exclude:
         - pull_request
-    volumes:
-    - name: docker
-      path: /var/run/docker.sock
+    # volumes:
+    # - name: docker
+    #   path: /var/run/docker.sock
     depends_on:
     - clone
 ##################################################
@@ -43,7 +43,7 @@ trigger:
     exclude:
     - tag
 
-volumes:
-- name: docker
-  host:
-    path: /var/run/docker.sock
+# volumes:
+# - name: docker
+#   host:
+#     path: /var/run/docker.sock
