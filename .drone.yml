@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: testing
+name: building
 
 platform:
   os: linux
@@ -22,7 +22,7 @@ steps:
         exclude:
         - pull_request
 ##################################################
-  - name: clone
+  - name: build_docker_img
     pull: always
     image: docker:latest
     commands:
