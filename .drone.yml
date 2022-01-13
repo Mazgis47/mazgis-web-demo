@@ -24,11 +24,15 @@ steps:
 ##################################################
   - name: build_docker_img
     pull: always
-    # image: docker:latest
-    image: mazgis47/docker:latest
+    image: docker:latest
     commands:
     - cd $DRONE_REPO_NAME
     - docker build --network host -t mazgis47/test-web-app:latest .
+    - docker login -u mazgis47 -p "${PLUGIN_DOCKERHUB_TOKEN}"
+    - docker push mazgis47/test-web-app:latest
+    settings:
+      DOCKERHUB_TOKEN:
+          from_secret: dockerhub_token
     when:
       event:
         exclude:
