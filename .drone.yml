@@ -17,7 +17,6 @@ steps:
     - git clone $DRONE_REMOTE_URL
     - cd $DRONE_REPO_NAME
     - git checkout $DRONE_BRANCH
-    - whoami
     when:
       event:
         exclude:
@@ -46,6 +45,7 @@ steps:
 ##################################################
   - name: generate_manifest
     image: bitnami/kubectl:latest
+    user: root
     commands:
     - cd $DRONE_REPO_NAME
     - whoami
@@ -66,6 +66,7 @@ steps:
   - name: push_manifest
     pull: always
     image: alpine/git:latest
+    user: root
     commands:
     - git clone https://github.com/Mazgis47/gitops.git
     - cp $DRONE_REPO_NAME/app.yaml gitops/
