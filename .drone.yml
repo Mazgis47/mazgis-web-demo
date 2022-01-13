@@ -43,12 +43,11 @@ steps:
     depends_on:
     - clone
 ##################################################
-  - name: deploy
+  - name: generate_manifest
     image: bitnami/kubectl:latest
     commands:
     - cd $DRONE_REPO_NAME
-    - echo "$PLUGIN_KUBE_CONFIG" > ~/.kube/config
-    - kubectl apply -k kubernetes/overlays/test
+    - kubectl kustomize kubernetes/overlays/test > app.yaml
     settings:
       KUBE_CONFIG:
           from_secret: kube_config
@@ -58,6 +57,28 @@ steps:
         - pull_request
     depends_on:
     - build_docker_img
+##################################################
+  - name: push_manifest
+    pull: always
+    image: alpine/git:latest
+    commands:
+    - git clone https://github.com/Mazgis47/gitops.git
+    - cp $DRONE_REPO_NAME/app.yaml gitops/
+    - cd gitops
+    - git add -A
+    - git commit -m "Releasing $DRONE_COMMIT_SHA"
+    - AUTH_HEADER=$(echo -n "n:$GITHUB_TOKEN" |base64 );
+    - |
+      git -c http.extraheader="AUTHORIZATION: Basic ${AZURE_AUTH_HEADER}" push
+    settings:
+      GITHUB_TOKEN:
+          from_secret: github_token
+    when:
+      event:
+        exclude:
+        - pull_request
+    depends_on:
+    - generate_manifest
 ##################################################
 
 trigger:
