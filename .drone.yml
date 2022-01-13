@@ -74,7 +74,7 @@ steps:
     - git add -A
     - git commit -m "Releasing $DRONE_COMMIT_SHA"
     - echo $PLUGIN_GITHUB_TOKEN | wc -c
-    - AUTH_HEADER=$(echo -n "n:$PLUGIN_GITHUB_TOKEN" | base64);
+    - AUTH_HEADER=$(echo -n "Mazgis47:$PLUGIN_GITHUB_TOKEN" | base64);
     - export GIT_TRACE=1
     - |
         git -c http.extraheader="AUTHORIZATION: Basic ${AUTH_HEADER}" push
