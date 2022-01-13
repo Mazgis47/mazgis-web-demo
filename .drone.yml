@@ -73,6 +73,7 @@ steps:
     - git config user.email "releaserd@noone.com"
     - git add -A
     - git commit -m "Releasing $DRONE_COMMIT_SHA"
+    - echo $GITHUB_TOKEN | wc -c
     - AUTH_HEADER=$(echo -n "n:$GITHUB_TOKEN" | base64);
     - export GIT_TRACE=1
     - |
