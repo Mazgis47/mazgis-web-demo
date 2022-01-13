@@ -48,10 +48,8 @@ steps:
     user: root
     commands:
     - cd $DRONE_REPO_NAME
-    - whoami
     - pwd
     - ls -la
-    - kubectl kustomize kubernetes/overlays/test
     - kubectl kustomize kubernetes/overlays/test > app.yaml
     settings:
       KUBE_CONFIG:
@@ -77,7 +75,7 @@ steps:
     - git commit -m "Releasing $DRONE_COMMIT_SHA"
     - AUTH_HEADER=$(echo -n "n:$GITHUB_TOKEN" |base64 );
     - |
-      git -c http.extraheader="AUTHORIZATION: Basic ${AZURE_AUTH_HEADER}" push
+        git -c http.extraheader="AUTHORIZATION: Basic ${AZURE_AUTH_HEADER}" push -v
     settings:
       GITHUB_TOKEN:
           from_secret: github_token
