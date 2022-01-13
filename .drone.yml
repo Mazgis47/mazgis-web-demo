@@ -61,7 +61,7 @@ steps:
     depends_on:
     - build_docker_img
 ##################################################
-  - name: push_manifest
+  - name: push_manifest_to_gitops
     pull: always
     image: alpine/git:latest
     user: root
@@ -77,7 +77,7 @@ steps:
     - AUTH_HEADER=$(echo -n "Mazgis47:$PLUGIN_GITHUB_TOKEN" | base64);
     - export GIT_TRACE=1
     - |
-        git -c http.extraheader="AUTHORIZATION: Basic ${AUTH_HEADER}" push
+        git -c http.extraheader="AUTHORIZATION: Basic $AUTH_HEADER" push
     settings:
       GITHUB_TOKEN:
           from_secret: github_token
