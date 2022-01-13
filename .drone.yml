@@ -43,6 +43,23 @@ steps:
     depends_on:
     - clone
 ##################################################
+  - name: deploy
+    image: bitnami/kubectl:latest
+    commands:
+    - cd $DRONE_REPO_NAME
+    - echo "$PLUGIN_KUBE_CONFIG" > ~/.kube/config
+    - kubectl apply -k kubernetes/overlays/test
+    settings:
+      KUBE_CONFIG:
+          from_secret: kube_config
+    when:
+      event:
+        exclude:
+        - pull_request
+    depends_on:
+    - build_docker_img
+##################################################
+
 trigger:
   event:
     exclude:
