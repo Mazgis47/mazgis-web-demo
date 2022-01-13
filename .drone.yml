@@ -28,7 +28,7 @@ steps:
     image: mazgis47/docker:latest
     commands:
     - cd $DRONE_REPO_NAME
-    - docker build -t mazgis47/test-web-app:latest .
+    - docker build --network host -t mazgis47/test-web-app:latest .
     when:
       event:
         exclude:
