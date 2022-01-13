@@ -73,7 +73,7 @@ steps:
     - git config user.name "Releaser"
     - git config user.email "releaserd@noone.com"
     - git add -A
-    - if ! git commit -m "Releasing $DRONE_COMMIT_SHA"; then exit 0; fi
+    - if ! git commit -m "Releasing $DRONE_COMMIT_SHA"; then echo 'nothing to commit'; exit 0; fi
     - AUTH_HEADER=$(echo -n "Mazgis47:$PLUGIN_GITHUB_TOKEN" | base64);
     - export GIT_TRACE=1
     - |
