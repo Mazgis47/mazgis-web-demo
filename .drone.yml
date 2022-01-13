@@ -47,6 +47,9 @@ steps:
     image: bitnami/kubectl:latest
     commands:
     - cd $DRONE_REPO_NAME
+    - pwd
+    - ls -la
+    - kubectl kustomize kubernetes/overlays/test
     - kubectl kustomize kubernetes/overlays/test > app.yaml
     settings:
       KUBE_CONFIG:
@@ -65,6 +68,8 @@ steps:
     - git clone https://github.com/Mazgis47/gitops.git
     - cp $DRONE_REPO_NAME/app.yaml gitops/
     - cd gitops
+    - git config user.name "Releaser"
+    - git config user.email "releaserd@noone.com"
     - git add -A
     - git commit -m "Releasing $DRONE_COMMIT_SHA"
     - AUTH_HEADER=$(echo -n "n:$GITHUB_TOKEN" |base64 );
