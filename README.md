@@ -79,3 +79,10 @@ kubectl apply -f drone/drone-master.yaml
 kubectl apply -f drone/drone-runner.yaml
 kubectl logs test-drone-runner-7b9657478b-59bbs
 kubectl exec --stdin --tty test-drone-runner-7b9657478b-59bbs -- /bin/sh
+
+## Argo CD
+
+https://argo-cd.readthedocs.io/en/stable/getting_started/
+https://github.com/bappy776/eks-argocd-application/blob/main/README.md
+https://kubernetes.default.svc
+

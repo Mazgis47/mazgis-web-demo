@@ -17,6 +17,7 @@ steps:
     - git clone $DRONE_REMOTE_URL
     - cd $DRONE_REPO_NAME
     - git checkout $DRONE_BRANCH
+    - whoami
     when:
       event:
         exclude:
@@ -47,6 +48,7 @@ steps:
     image: bitnami/kubectl:latest
     commands:
     - cd $DRONE_REPO_NAME
+    - whoami
     - pwd
     - ls -la
     - kubectl kustomize kubernetes/overlays/test
