@@ -67,12 +67,13 @@ steps:
     user: root
     commands:
     - git clone https://github.com/Mazgis47/gitops.git
-    - cp $DRONE_REPO_NAME/app.yaml gitops/
+    - mkdir -p gitops/manifest/
+    - cp $DRONE_REPO_NAME/app.yaml gitops/manifest/
     - cd gitops
     - git config user.name "Releaser"
     - git config user.email "releaserd@noone.com"
     - git add -A
-    - git commit -m "Releasing $DRONE_COMMIT_SHA"
+    - if ! git commit -m "Releasing $DRONE_COMMIT_SHA"; then exit 0; fi
     - echo $PLUGIN_GITHUB_TOKEN | wc -c
     - AUTH_HEADER=$(echo -n "Mazgis47:$PLUGIN_GITHUB_TOKEN" | base64);
     - export GIT_TRACE=1
