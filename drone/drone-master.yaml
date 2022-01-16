@@ -11,9 +11,7 @@
 apiVersion: v1
 data:
   DRONE_GITHUB_CLIENT_ID: 0edeeb9eab5472929683
-  DRONE_GITHUB_CLIENT_SECRET: placeholder
-  DRONE_RPC_SECRET: 'placeholder'
-  DRONE_SERVER_HOST: 'a086f4d11f9134cbc90cd990b27dfb93-631899771.us-east-2.elb.amazonaws.com'
+  DRONE_SERVER_HOST: 'a85c5111b57744361b22901cd4f6a274-152372090.us-east-2.elb.amazonaws.com'
   DRONE_SERVER_PROTO: http
   DRONE_USER_CREATE: 'username:Mazgis47,admin:true'
   environment: test
@@ -84,6 +82,8 @@ spec:
       - envFrom:
         - configMapRef:
             name: test-drone-master
+        - secretRef:
+            name: drone-secret
         image: drone/drone:2
         name: drone-master
         ports:
@@ -99,9 +99,9 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/drone
           name: drone-db
-        - name: secrets-store-inline
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
+        # - name: secrets-store-inline
+        #   mountPath: "/mnt/secrets-store"
+        #   readOnly: true
       serviceAccountName: deployment-account
       volumes:
         - name: drone-db

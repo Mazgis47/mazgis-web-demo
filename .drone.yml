@@ -51,9 +51,9 @@ steps:
     - pwd
     - ls -la
     - kubectl kustomize kubernetes/overlays/test > app.yaml
-    settings:
-      KUBE_CONFIG:
-          from_secret: kube_config
+    # settings:
+    #   KUBE_CONFIG:
+    #       from_secret: kube_config
     when:
       event:
         exclude:
