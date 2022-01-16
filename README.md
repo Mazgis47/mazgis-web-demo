@@ -96,6 +96,7 @@ https://argo-cd.readthedocs.io/en/stable/getting_started/
 https://github.com/bappy776/eks-argocd-application/blob/main/README.md
 https://kubernetes.default.svc
 
+kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl get svc argocd-server -n argocd | awk '{print $4}'
