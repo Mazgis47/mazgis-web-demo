@@ -71,14 +71,24 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## App deploy
 
+aws configure
 aws sts get-caller-identity
 aws eks --region us-east-2 update-kubeconfig --name demo-eks-1
-kubectl get service/test-demo-website-loadbalancer |  awk {'print $1" " $2 " " $4 " " $5'} | column -t
+eksctl utils associate-iam-oidc-provider --cluster demo-eks-1 --approve
+
+helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/chart
+helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver
+kubectl --namespace=default get pods -l "app=secrets-store-csi-driver"
+
 kubectl apply -k kubernetes/overlays/test
+kubectl apply -f drone/storage.yaml
 kubectl apply -f drone/drone-master.yaml
 kubectl apply -f drone/drone-runner.yaml
 kubectl logs test-drone-runner-7b9657478b-59bbs
 kubectl exec --stdin --tty test-drone-runner-7b9657478b-59bbs -- /bin/sh
+
+kubectl get service/test-drone-master-loadbalancer |  awk {'print $1" " $2 " " $4 " " $5'} | column -t
+kubectl get service/test-demo-website-loadbalancer |  awk {'print $1" " $2 " " $4 " " $5'} | column -t
 
 ## Argo CD
 
@@ -86,3 +96,23 @@ https://argo-cd.readthedocs.io/en/stable/getting_started/
 https://github.com/bappy776/eks-argocd-application/blob/main/README.md
 https://kubernetes.default.svc
 
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl get svc argocd-server -n argocd | awk '{print $4}'
+kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+argocd login a3a5bc3f8072c454a9ae809b0b3f59d9-1541692732.us-east-2.elb.amazonaws.com --insecure
+
+argocd account update-password
+
+## Secrets
+
+https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_csi_driver_tutorial.html
+export REGION=us-east-2
+export CLUSTERNAME=demo-eks-1
+aws --region "$REGION" secretsmanager  create-secret --name MySecret --secret-string 'mysecret'
+
+https://github.com/aws/secrets-store-csi-driver-provider-aws
+helm repo add secrets-store-csi-driver https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/master/charts
+helm install -n kube-system csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver
+kubectl apply -f https://raw.githubusercontent.com/aws/secrets-store-csi-driver-provider-aws/main/deployment/aws-provider-installer.yaml

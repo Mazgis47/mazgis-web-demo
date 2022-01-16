@@ -1,0 +1,63 @@
+apiVersion: v1
+data:
+  DRONE_RPC_PROTO: http
+  DRONE_RPC_SECRET: 'placeholder'
+  DRONE_RPC_HOST: 'a086f4d11f9134cbc90cd990b27dfb93-631899771.us-east-2.elb.amazonaws.com'
+  DRONE_RUNNER_CAPACITY: '2'
+  DRONE_RUNNER_NAME: demorunner
+  environment: test
+kind: ConfigMap
+metadata:
+  labels:
+    app: drone-runner
+    group: drone-runner
+  name: test-drone-runner
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: drone-runner
+    group: drone-runner
+  name: test-drone-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone-runner
+      group: drone-runner
+  template:
+    metadata:
+      labels:
+        app: drone-runner
+        group: drone-runner
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: test-drone-runner
+        image: drone/drone-runner-docker:1
+        name: drone-runner
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 3072Mi
+          requests:
+            cpu: 200m
+            memory: 500Mi
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+      volumes:
+      - name: docker-sock
+        hostPath:
+          # directory location on host
+          path: /var/run/docker.sock
+          # this field is optional
+          type: Socket
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "aws-secrets"

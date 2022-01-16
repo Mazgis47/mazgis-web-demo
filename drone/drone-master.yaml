@@ -1,0 +1,115 @@
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: deployment-account
+#   # If you're using Amazon EKS with IAM Roles for Service Accounts, specify the following annotation.
+#   # Otherwise, you may safely omit it.
+#   annotations:
+#     # Substitute your account ID and IAM service role name below.
+#     eks.amazonaws.com/role-arn: arn:aws:iam::173609628671:role/account-role
+# ---
+apiVersion: v1
+data:
+  DRONE_GITHUB_CLIENT_ID: 0edeeb9eab5472929683
+  DRONE_GITHUB_CLIENT_SECRET: 1b7f7f238f103e2bd582faa38c46aca269c3290a
+  DRONE_RPC_SECRET: '123456'
+  DRONE_SERVER_HOST: 'a086f4d11f9134cbc90cd990b27dfb93-631899771.us-east-2.elb.amazonaws.com'
+  DRONE_SERVER_PROTO: http
+  DRONE_USER_CREATE: 'username:Mazgis47,admin:true'
+  environment: test
+kind: ConfigMap
+metadata:
+  labels:
+    app: drone-master
+    group: drone-master
+  name: test-drone-master
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: drone-master
+    group: drone-master
+    name: drone-master-http
+  name: test-drone-master-http
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: drone-master
+    group: drone-master
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: drone-master
+    group: drone-master
+  name: test-drone-master-loadbalancer
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: drone.mazgis47.com
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: drone-master
+    group: drone-master
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: drone-master
+    group: drone-master
+  name: test-drone-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone-master
+      group: drone-master
+  template:
+    metadata:
+      labels:
+        app: drone-master
+        group: drone-master
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: test-drone-master
+        image: drone/drone:2
+        name: drone-master
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /var/lib/drone
+          name: drone-db
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      serviceAccountName: deployment-account
+      volumes:
+        - name: drone-db
+          persistentVolumeClaim:
+            claimName: log-claim
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: aws-secrets
