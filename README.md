@@ -76,7 +76,7 @@ aws sts get-caller-identity
 aws eks --region us-east-2 update-kubeconfig --name demo-eks-1
 eksctl utils associate-iam-oidc-provider --cluster demo-eks-1 --approve
 
-helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/chart
+helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
 helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver
 kubectl --namespace=default get pods -l "app=secrets-store-csi-driver"
 

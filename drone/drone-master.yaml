@@ -11,8 +11,8 @@
 apiVersion: v1
 data:
   DRONE_GITHUB_CLIENT_ID: 0edeeb9eab5472929683
-  DRONE_GITHUB_CLIENT_SECRET: 1b7f7f238f103e2bd582faa38c46aca269c3290a
-  DRONE_RPC_SECRET: '123456'
+  DRONE_GITHUB_CLIENT_SECRET: placeholder
+  DRONE_RPC_SECRET: 'placeholder'
   DRONE_SERVER_HOST: 'a086f4d11f9134cbc90cd990b27dfb93-631899771.us-east-2.elb.amazonaws.com'
   DRONE_SERVER_PROTO: http
   DRONE_USER_CREATE: 'username:Mazgis47,admin:true'
