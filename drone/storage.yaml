@@ -24,30 +24,30 @@ spec:
     requests:
       storage: 200Mi
   storageClassName: manual
----
-apiVersion: secrets-store.csi.x-k8s.io/v1
-kind: SecretProviderClass
-metadata:
-  name: aws-secrets
-spec:
-  provider: aws
-  secretObjects:
-    - secretName: drone-secret
-      type: Opaque
-      data:
-        - objectName: GITHUB_CLIENT_SECRET
-          key: GITHUB_CLIENT_SECRET
-        - objectName: RPC_SECRET
-          key: RPC_SECRET
-  parameters:
-    objects: |
-        - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:drone-secret-kMUllj"
-          objectType: "secretsmanager"
-        # - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:GITHUB_CLIENT_SECRET-rLyEDD"
-        #   objectType: "secretsmanager"
-        # - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:RPC_SECRET-zMZXUW"
-        #   objectType: "secretsmanager"
-        # - objectName: "GITHUB_CLIENT_SECRET"
-        #   objectType: "secretsmanager"
-        # - objectName: "RPC_SECRET"
-        #   objectType: "secretsmanager"
+# ---
+# apiVersion: secrets-store.csi.x-k8s.io/v1
+# kind: SecretProviderClass
+# metadata:
+#   name: aws-secrets
+# spec:
+#   provider: aws
+#   secretObjects:
+#     - secretName: drone-secret
+#       type: Opaque
+#       data:
+#         - objectName: GITHUB_CLIENT_SECRET
+#           key: GITHUB_CLIENT_SECRET
+#         - objectName: RPC_SECRET
+#           key: RPC_SECRET
+#   parameters:
+#     objects: |
+#         - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:drone-secret-kMUllj"
+#           objectType: "secretsmanager"
+#         # - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:GITHUB_CLIENT_SECRET-rLyEDD"
+#         #   objectType: "secretsmanager"
+#         # - objectName: "arn:aws:secretsmanager:us-east-2:173609628671:secret:RPC_SECRET-zMZXUW"
+#         #   objectType: "secretsmanager"
+#         # - objectName: "GITHUB_CLIENT_SECRET"
+#         #   objectType: "secretsmanager"
+#         # - objectName: "RPC_SECRET"
+#         #   objectType: "secretsmanager"

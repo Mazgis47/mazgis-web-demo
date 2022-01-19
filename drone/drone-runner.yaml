@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   DRONE_RPC_PROTO: http
-  DRONE_RPC_HOST: 'a85c5111b57744361b22901cd4f6a274-152372090.us-east-2.elb.amazonaws.com'
+  DRONE_RPC_HOST: 'a58de92a741b046159d952bd74494cf9-1134025329.us-east-2.elb.amazonaws.com'
   DRONE_RUNNER_CAPACITY: '2'
   DRONE_RUNNER_NAME: demorunner
   environment: test
